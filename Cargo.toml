@@ -1,0 +1,22 @@
+[package]
+name = "{{crate_name}}"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+{% if library_option == "complex" %}
+native-1c = { git = "https://github.com/tuplecats/rust-native-1c" }
+{% else %}
+native_api_1c = { git = "https://github.com/Sebekerga/native_api_1c" }
+utf16_lit = "2.0.2"
+{% endif %}
+[profile.dev.package]
+insta.opt-level = 3
+similar.opt-level = 3
+
+[dev-dependencies]
+insta = { version = "1.31.0", features = ["redactions"] }

@@ -1,0 +1,18 @@
+[placeholders.library_option]
+type = "string"
+prompt = "Select library option"
+choices = ["simple", "complex"]
+default = "complex"
+
+[placeholders.addin_name]
+type = "string"
+prompt = "Название компоненты?"
+
+[template]
+include = [
+    "Makefile.toml",
+    "Manifest.xml",
+    "Cargo.toml",
+    "src/lib.rs",
+    "src/addin.rs",
+]
