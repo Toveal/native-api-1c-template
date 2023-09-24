@@ -16,7 +16,7 @@ default = true
 
 [placeholders.addin_name]
 type = "string"
-prompt = "Название компоненты?"
+prompt = "Component name?"
 
 [template]
 include = [
