@@ -137,4 +137,4 @@ dependencies = ["clean", "release", "remove-out", "copy_bin", "pack-to-zip"]
 
 [tasks.test]
 command = "cargo"
-args = ["insta", "test"]
+{% if use_insta == true %}args = ["insta", "test"]{% else %}args = ["test"]{% endif %}
