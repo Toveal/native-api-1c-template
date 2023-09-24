@@ -17,6 +17,7 @@ default = true
 [placeholders.addin_name]
 type = "string"
 prompt = "Component name?"
+regex = "^[A-Z][a-zA-Z0-9]*$"
 
 [template]
 include = [
