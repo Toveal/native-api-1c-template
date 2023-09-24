@@ -139,5 +139,5 @@ impl {{addin_name}} {
 
 #[cfg(test)]
 mod tests {
-    use insta::{assert_debug_snapshot, assert_snapshot};
+    {% if use_insta == true %}use insta::{assert_debug_snapshot, assert_snapshot};{% endif %}
 }

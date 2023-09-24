@@ -50,7 +50,7 @@ unsafe extern "C" fn SetPlatformCapabilities(capabilities: AppCapabilities) -> A
 #[cfg(test)]
 mod tests {
     use super::GetClassNames;
-    use insta::{assert_debug_snapshot, assert_snapshot};
+    {% if use_insta == true %}use insta::{assert_debug_snapshot, assert_snapshot};{% endif %}
 
     fn get_class_names() {
         let class_names = unsafe { GetClassNames() };
