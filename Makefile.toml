@@ -129,7 +129,7 @@ Get-ChildItem -Path "./out" -File | ForEach-Object {
 }
 '''
 
-[tasks.pack-debug]
+[tasks.pack]
 dependencies = ["clean", "debug", "remove-out", "copy_bin", "pack-to-zip"]
 
 [tasks.pack-release]

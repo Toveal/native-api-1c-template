@@ -31,7 +31,7 @@ cd my-project
 #  🧙‍♂️ build
 #### For debug builds
 ```
-cargo make pack-debug
+cargo make pack
 ```
 #### For release builds
 ```
