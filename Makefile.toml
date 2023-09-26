@@ -77,13 +77,13 @@ script_runner = "@duckscript"
 script = '''
 mkdir ./out
 dirs = map
-map_put ${dirs} x86_64-pc-windows-msvc/$$type$$/{{crate_name}}.dll windows_{{addin_name}}_x64.dll
-map_put ${dirs} i686-pc-windows-msvc/$$type$$/{{crate_name}}.dll windows_{{addin_name}}_x32.dll
-map_put ${dirs} x86_64-pc-windows-gnu/$$type$$/{{crate_name}}.dll windows_{{addin_name}}_x64.dll
-map_put ${dirs} i686-pc-windows-gnu/$$type$$/{{crate_name}}.dll windows_{{addin_name}}_x32.dll
+map_put ${dirs} x86_64-pc-windows-msvc/$$type$$/{{crate_name}}.dll {{addin_name}}_x64.dll
+map_put ${dirs} i686-pc-windows-msvc/$$type$$/{{crate_name}}.dll {{addin_name}}_x32.dll
+map_put ${dirs} x86_64-pc-windows-gnu/$$type$$/{{crate_name}}.dll {{addin_name}}_x64.dll
+map_put ${dirs} i686-pc-windows-gnu/$$type$$/{{crate_name}}.dll {{addin_name}}_x32.dll
 
-map_put ${dirs} x86_64-unknown-linux-gnu/$$type$$/lib{{crate_name}}.so linux_{{addin_name}}_x64.so
-map_put ${dirs} i686-unknown-linux-gnu/$$type$$/lib{{crate_name}}.so linux_{{addin_name}}_x32.so
+map_put ${dirs} x86_64-unknown-linux-gnu/$$type$$/lib{{crate_name}}.so {{addin_name}}_x64.so
+map_put ${dirs} i686-unknown-linux-gnu/$$type$$/lib{{crate_name}}.so {{addin_name}}_x32.so
 
 keys = map_keys ${dirs}
 
