@@ -1,0 +1,14 @@
+[template]
+
+[hooks]
+init = ["create_mods.rhai"]
+
+[placeholders.use_cross]
+type = "bool"
+prompt = "Use cargo cross?"
+default = true
+
+[placeholders.use_insta]
+type = "bool"
+prompt = "Use cargo insta?"
+default = true

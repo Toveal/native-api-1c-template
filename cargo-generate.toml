@@ -1,0 +1,22 @@
+# [placeholders.library_option]
+# type = "string"
+# prompt = "Select library option"
+# choices = ["simple", "complex"]
+# default = "simple"
+
+# [placeholders.use_cross]
+# type = "bool"
+# prompt = "Use cargo cross?"
+# default = true
+
+# [placeholders.use_insta]
+# type = "bool"
+# prompt = "Use cargo insta?"
+# default = true
+
+# [hooks]
+# init = ["init-hook.rhai"]
+
+[template]
+# include = ["Makefile.toml", "Manifest.xml", "Cargo.toml", "src/*"]
+sub_templates = ["simple", "complex"]
