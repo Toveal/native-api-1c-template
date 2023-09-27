@@ -1,7 +1,7 @@
 let objects = [];
 
 while true {
-    let input = variable::prompt("Input addin name or stop", "stop", "^[A-Z][a-zA-Z0-9]*$|^stop");
+    let input = variable::prompt("Enter the name of the component or stop", "stop", "^[A-Z][a-zA-Z0-9]*$|^stop");
     
     if input == "stop" {
         break;
