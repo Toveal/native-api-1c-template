@@ -1,16 +1,6 @@
-let objects = [];
+import "../scripts/get_name_addins.rhai" as get_names;
 
-while true {
-    let input = variable::prompt("Enter the name of the component or stop", "stop", "^[A-Z][a-zA-Z0-9]*$|^stop");
-    
-    if input == "stop" {
-        break;
-    } else if objects.contains(input) {
-        continue;
-    } else {
-        objects.push(input);
-    }
-}
+let objects = get_names::get_addin_names();
 
 let mods_placeholder = "";
 let use_lib_placehol = "";
@@ -23,42 +13,38 @@ let last_obj = objects.len() - 1;
 while it <= last_obj {
     let obj = objects[it];
 
-    let file_name = to_snake_case(obj) + ".rs";
+    let obj_snake = to_snake_case(obj);
     let template = get_template(obj);
-    file::write("src/" + file_name, template);
+    file::write(`src/${obj_snake}.rs`, template);
 
-    let snake_mod = to_snake_case(obj);
-    mods_placeholder += get_mods_block(snake_mod);
+    mods_placeholder += `mod ${obj_snake};${"\n"}`;
 
     if last_obj == it {
         class_names_placehol += obj;
     } else {
         class_names_placehol += obj + "|";
     }
-    math_class_placehol += get_math_block(obj, snake_mod);
+    math_class_placehol += get_math_block(obj, obj_snake);
 
     it += 1;
 }
 
-variable::set("mods_lib", mods_placeholder);
-variable::set("class_names_get", class_names_placehol);
-variable::set("match_comp_name", math_class_placehol);
-
-fn get_mods_block(object_name) {
-    return `mod ${object_name};${"\n"}`;
-}
+variable::set("lib_mods_addin", mods_placeholder);
+variable::set("lib_class_names", class_names_placehol);
+variable::set("lib_mach_object_name", math_class_placehol);
 
 fn get_math_block(object_name, mod_name) {
-    return `
-    "${object_name}" => {
-        let addin = ${mod_name}::${object_name}::new();
-        Box::into_raw(Box::new(addin)) as *const u8
+    return 
+    `"${object_name}" => {
+            let addin = ${mod_name}::${object_name}::new();
+            Box::into_raw(Box::new(addin)) as *const u8
     },
     `;
 }
 
 fn get_template(object_name) {
-    return `{% if library_option == "complex" %}use native_1c::component::IComponentBase;
+    return 
+    `use native_1c::component::IComponentBase;
 use native_1c::native_macro::native_object;
 use native_1c::types::Variant;
 
@@ -169,30 +155,5 @@ impl IComponentBase for ${object_name} {
 }
 
 impl ${object_name} {
-}
-{% else %}use std::sync::Arc;
-
-use native_api_1c::{
-    native_api_1c_core::ffi::connection::Connection, 
-    native_api_1c_macro::AddIn
-};
-
-#[derive(AddIn)] 
-pub struct ${object_name} { 
-    #[add_in_con] // соединение с 1С для вызова внешних событий 
-    connection: Arc<Option<&'static Connection>>, // Arc для возможности многопоточности 
-}
-
-impl ${object_name} {
-    pub fn new() -> Self {
-        Self {
-            connection: Arc::new(None),
-        }
-    }
-}
-{% endif %}
-#[cfg(test)]
-mod tests {
-    {% if use_insta == true %}use insta::{assert_debug_snapshot, assert_snapshot};{% endif %}
 }`;
 }

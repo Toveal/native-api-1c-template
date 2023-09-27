@@ -5,55 +5,60 @@ args = ["clean"]
 [tasks.remove-out.windows]
 script_runner = "@duckscript"
 script = '''
-rm -r ./out 
-'''
+rm -r ./out '''
+
+{% if use_cross -%}
+  {%- assign build_runner = "cross" -%}
+{%- else -%}
+  {%- assign build_runner = "cargo" -%}
+{%- endif -%}
 
 [tasks.build-release-windows-32.linux]
-{% if use_cross == true %}command = "cross"{% else %}command = "cargo"{% endif %}
+command = "{{ build_runner }}"
 args = ["build", "--release", "--target", "i686-pc-windows-gnu"]
 
 [tasks.build-release-windows-64.linux]
-{% if use_cross == true %}command = "cross"{% else %}command = "cargo"{% endif %}
+command = "{{ build_runner }}"
 args = ["build", "--release", "--target", "x86_64-pc-windows-gnu"]
 
 [tasks.build-debug-windows-32.linux]
-{% if use_cross == true %}command = "cross"{% else %}command = "cargo"{% endif %}
+command = "{{ build_runner }}"
 args = ["build", "--target", "i686-pc-windows-gnu"]
 
 [tasks.build-debug-windows-64.linux]
-{% if use_cross == true %}command = "cross"{% else %}command = "cargo"{% endif %}
+command = "{{ build_runner }}"
 args = ["build", "--target", "x86_64-pc-windows-gnu"]
 
 [tasks.build-release-windows-32.windows]
-{% if use_cross == true %}command = "cross"{% else %}command = "cargo"{% endif %}
+command = "{{ build_runner }}"
 args = ["build", "--release", "--target", "i686-pc-windows-msvc"]
 
 [tasks.build-release-windows-64.windows]
-{% if use_cross == true %}command = "cross"{% else %}command = "cargo"{% endif %}
+command = "{{ build_runner }}"
 args = ["build", "--release", "--target", "x86_64-pc-windows-msvc"]
 
 [tasks.build-debug-windows-32.windows]
-{% if use_cross == true %} command = "cross" {% else %} command = "cargo" {% endif %}
+command = "{{ build_runner }}"
 args = ["build", "--target", "i686-pc-windows-msvc"]
 
 [tasks.build-debug-windows-64.windows]
-{% if use_cross == true %}command = "cross"{% else %}command = "cargo"{% endif %}
+command = "{{ build_runner }}"
 args = ["build", "--target", "x86_64-pc-windows-msvc"]
 
 [tasks.build-debug-linux-64]
-{% if use_cross == true %}command = "cross"{% else %}command = "cargo"{% endif %}
+command = "{{ build_runner }}"
 args = ["build", "--target", "x86_64-unknown-linux-gnu"]
 
 [tasks.build-release-linux-64]
-{% if use_cross == true %}command = "cross"{% else %}command = "cargo"{% endif %}
+command = "{{ build_runner }}"
 args = ["build", "--release", "--target", "x86_64-unknown-linux-gnu"]
 
 [tasks.build-debug-linux-32]
-{% if use_cross == true %}command = "cross"{% else %}command = "cargo"{% endif %}
+command = "{{ build_runner }}"
 args = ["build", "--target", "i686-unknown-linux-gnu"]
 
 [tasks.build-release-linux-32]
-{% if use_cross == true %}command = "cross"{% else %}command = "cargo"{% endif %}
+command = "{{ build_runner }}"
 args = ["build", "--release", "--target", "i686-unknown-linux-gnu"]
 
 [tasks.debug]
@@ -77,14 +82,12 @@ script_runner = "@duckscript"
 script = '''
 mkdir ./out
 dirs = map
-map_put ${dirs} x86_64-pc-windows-msvc/$$type$$/{{crate_name}}.dll {{addin_name}}_x64.dll
-map_put ${dirs} i686-pc-windows-msvc/$$type$$/{{crate_name}}.dll {{addin_name}}_x32.dll
-map_put ${dirs} x86_64-pc-windows-gnu/$$type$$/{{crate_name}}.dll {{addin_name}}_x64.dll
-map_put ${dirs} i686-pc-windows-gnu/$$type$$/{{crate_name}}.dll {{addin_name}}_x32.dll
-
-map_put ${dirs} x86_64-unknown-linux-gnu/$$type$$/lib{{crate_name}}.so {{addin_name}}_x64.so
-map_put ${dirs} i686-unknown-linux-gnu/$$type$$/lib{{crate_name}}.so {{addin_name}}_x32.so
-
+map_put ${dirs} x86_64-pc-windows-msvc/$$type$$/{{ crate_name }}.dll {{ crate_name }}_x64.dll
+map_put ${dirs} i686-pc-windows-msvc/$$type$$/{{ crate_name }}.dll {{ crate_name }}_x32.dll
+map_put ${dirs} x86_64-pc-windows-gnu/$$type$$/{{ crate_name }}.dll {{ crate_name }}_x64.dll
+map_put ${dirs} i686-pc-windows-gnu/$$type$$/{{ crate_name }}.dll {{ crate_name }}_x32.dll
+map_put ${dirs} x86_64-unknown-linux-gnu/$$type$$/lib{{ crate_name }}.so {{ crate_name }}_x64.so
+map_put ${dirs} i686-unknown-linux-gnu/$$type$$/lib{{ crate_name }}.so {{ crate_name }}_x32.so
 keys = map_keys ${dirs}
 
 for dir_target in ${keys}
@@ -117,7 +120,7 @@ cp Manifest.xml ./out/Manifest.xml
 script_runner = "bash"
 script = '''
 cd ./out 
-zip "{{addin_name}}" *
+zip "{{ crate_name }}" *
 '''
 
 [tasks.pack-to-zip.windows]
@@ -125,7 +128,7 @@ script_runner = "powershell"
 script_extension = "ps1"
 script = '''
 Get-ChildItem -Path "./out" -File | ForEach-Object {
-    Compress-Archive -Path $_.FullName -DestinationPath "./out/{{addin_name}}.zip" -Update
+    Compress-Archive -Path $_.FullName -DestinationPath "./out/{{ crate_name }}.zip" -Update
 }
 '''
 
@@ -136,6 +139,9 @@ dependencies = ["clean", "debug", "remove-out", "copy_bin", "pack-to-zip"]
 dependencies = ["clean", "release", "remove-out", "copy_bin", "pack-to-zip"]
 
 [tasks.test]
-
-{% if use_insta == true %}args = ["insta", "test"]{% else %}args = ["test"]{% endif %}
+{% if use_insta == true -%}
+args = ["insta", "test"]
+{%- else -%}
+args = ["test"]
+{%- endif %}
 command = "cargo"
