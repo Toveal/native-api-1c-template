@@ -2,7 +2,7 @@
 type = "string"
 prompt = "Select library option"
 choices = ["simple", "complex"]
-default = "complex"
+default = "simple"
 
 [placeholders.use_cross]
 type = "bool"
