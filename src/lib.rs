@@ -1,11 +1,8 @@
-mod addin;
-
-{% if library_option == "complex" %}
-use native_1c::component::AppCapabilities;
+{{mods_lib}}
+{% if library_option == "complex" %}use native_1c::component::AppCapabilities;
 use native_1c::widestring::{U16CStr, U16CString};
 use native_1c::OnceCell;
 use std::os::raw::c_long;
-use addin::{{addin_name}};
 
 static CLASS_NAMES: OnceCell<Vec<u16>> = OnceCell::new();
 
@@ -15,10 +12,7 @@ unsafe extern "C" fn GetClassObject(_name: *const u16, component: *mut *const u8
         return 0;
     };
     *component = match name.as_str() {
-        "{{addin_name}}" => {
-            let addin = {{addin_name}}::new();
-            Box::into_raw(Box::new(addin)) as *const u8
-        }
+        {{match_comp_name}}
         _ => return 0,
     };
     component as c_long
@@ -33,7 +27,7 @@ unsafe extern "C" fn DestroyObject(_component: *mut *const u8) -> c_long {
 unsafe extern "C" fn GetClassNames() -> *const u16 {
     CLASS_NAMES
         .get_or_init(|| {
-            U16CString::from_str("{{addin_name}}")
+            U16CString::from_str("{{class_names_get}}")
                 .unwrap()
                 .as_slice_with_nul()
                 .to_vec()

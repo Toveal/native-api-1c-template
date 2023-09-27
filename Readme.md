@@ -46,10 +46,10 @@ cargo make test
 # 📊 Result
 ```text
 out/
-├── {{addin_name}}_x32.dll
-├── {{addin_name}}_x64.dll
-├── {{addin_name}}_x32.so
-├── {{addin_name}}_x64.so
+├── {{crate_name}}_x32.dll
+├── {{crate_name}}_x64.dll
+├── {{crate_name}}_x32.so
+├── {{crate_name}}_x64.so
 ├── Manifest.xml
-├── {{addin_name}}.zip
+├── {{crate_name}}.zip
 ```

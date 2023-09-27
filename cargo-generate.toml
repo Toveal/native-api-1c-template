@@ -14,16 +14,8 @@ type = "bool"
 prompt = "Use cargo insta?"
 default = true
 
-[placeholders.addin_name]
-type = "string"
-prompt = "Component name?"
-regex = "^[A-Z][a-zA-Z0-9]*$"
+[hooks]
+init = ["init-hook.rhai"]
 
 [template]
-include = [
-    "Makefile.toml",
-    "Manifest.xml",
-    "Cargo.toml",
-    "src/lib.rs",
-    "src/addin.rs",
-]
+include = ["Makefile.toml", "Manifest.xml", "Cargo.toml", "src/*"]
