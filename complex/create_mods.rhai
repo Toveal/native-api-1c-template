@@ -70,7 +70,7 @@ impl IComponentBase for ${object_name} {
 
     fn find_prop(&self, prop_name: &str) -> i32 {
         match prop_name {
-            _ => unreachable!(),
+            _ => -1,
         }
     }
 
@@ -107,7 +107,7 @@ impl IComponentBase for ${object_name} {
 
     fn find_method(&self, method_name: &str) -> i32 {
         match method_name {
-            _ => unreachable!(),
+            _ => -1,
         }
     }
     fn get_method_name(&self, method_num: i32, method_alias: i32) -> &str {
